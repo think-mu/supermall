@@ -3,18 +3,24 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <home-swiper :banners="banners"></home-swiper>
-    <recommend-view :recommends="recommends"></recommend-view>
-    <feature-view></feature-view>
-    <tab-control :titles="['流行','新款','精选']" class="tab-control" @tabClick="tabClick"></tab-control>
-    <goods-list :goods="showGoods" />
+    <scroll class="content">
+      <home-swiper :banners="banners" />
+      <recommend-view :recommends="recommends" />
+      <feature-view />
+      <tab-control :titles="['流行','新款','精选']" class="tab-control" @tabClick="tabClick" />
+      <goods-list :goods="showGoods" />
+    </scroll>
+    <back-top/>
   </div>
 </template>
 
 <script>
 import NavBar from "components/common/navbar/NavBar";
+import Scroll from "components/common/scroll/Scroll";
+
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
+import BackTop from "components/content/backtop/BackTop"
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 
@@ -26,8 +32,10 @@ export default {
   name: "Home",
   components: {
     NavBar,
+    Scroll,
     TabControl,
     GoodsList,
+    BackTop,
     HomeSwiper,
     RecommendView,
     FeatureView
@@ -41,7 +49,7 @@ export default {
         new: { page: 0, list: [] },
         sell: { page: 0, list: [] }
       },
-      currentType: 'pop'
+      currentType: "pop"
     };
   },
   created() {
@@ -51,15 +59,15 @@ export default {
     this.getHomeGoods("sell");
   },
   computed: {
-    showGoods(){
-      return this.goods[this.currentType].list
+    showGoods() {
+      return this.goods[this.currentType].list;
     }
   },
   methods: {
     /**
      * 事件监听
      */
-    
+
     tabClick(index) {
       switch (index) {
         case 0:
@@ -99,9 +107,9 @@ export default {
 
 <style scoped>
 #home {
-  padding-top: 44px;
-  /* height: 100vh;
-    position: relative; */
+  /* padding-top: 44px */
+  height: 100vh;
+  position: relative;
 }
 .home-nav {
   background-color: var(--color-tint);
@@ -114,8 +122,17 @@ export default {
 }
 
 .tab-control {
-  position: sticky;
-  top: 44px;
+  /* position: sticky; 
+  top: 44px;*/
   z-index: 9;
+}
+
+.content {
+  overflow: hidden;
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  left: 0;
+  right: 0;
 }
 </style>
