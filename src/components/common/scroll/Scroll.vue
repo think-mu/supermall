@@ -1,27 +1,66 @@
 <template>
   <div class="wrapper" ref="wrapper">
     <div class="content">
-      <slot></slot>  
+      <slot></slot>
     </div>
   </div>
 </template>
 
 <script>
-  import BScroll from "better-scroll";
- 
-  export default {
-    name: "Scroll",
-    data() {
-      return {
-        scroll: null
-      }
+import BScroll from "better-scroll";
+
+export default {
+  name: "Scroll",
+  data() {
+    return {
+      scroll: null
+    };
+  },
+  props: {
+    probeType: {
+      type: Number,
+      default: 0
     },
-    mounted() {
-      this.scroll = new BScroll(this.$refs.wrapper,{})
+    pullUpLoad: {
+      type: Boolean,
+      default: false
+    }
+  },
+  mounted() {
+    this.scroll = new BScroll(this.$refs.wrapper, {
+      click: true,
+      probeType: this.probeType,
+      pullUpLoad: this.pullUpLoad
+    });
+
+    if (this.probeType === 2 || this.probeType === 3) {
+      this.scroll.on("scroll", position => {
+        this.$emit("scroll", position); //设置函数(带参)传给首页
+      });
+    }
+
+    if (this.pullUpLoad) {
+      this.scroll.on("pullingUp", () => {
+        this.$emit("pullingUp");
+      });
+    }
+  },
+  methods: {
+    scrollTo(x, y, time = 300) {
+      this.scroll.scrollTo(x, y, time);
+    },
+    refresh() {
+      this.scroll && this.scroll.refresh(); //判断this.scroll 是否有值
+    },
+    finishPullUp() {
+      this.scroll.finishPullUp();
+    },
+    getScrollY() {
+      return this.scroll ? this.scroll.y : 0
     }
   }
+};
 </script>
 
 <style scoped>
-
 </style>

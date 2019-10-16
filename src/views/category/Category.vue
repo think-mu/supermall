@@ -1,5 +1,5 @@
 <template>
-  <div class="warpper">
+  <div class="wrapper">
     <ul class="content">
       <li>分类列表1</li>
       <li>分类列表2</li>
@@ -118,7 +118,7 @@ export default {
     
   },
   mounted() {
-    this.scroll = new BScroll(document.querySelector('.warpper'), {
+    this.scroll = new BScroll(document.querySelector('.wrapper'), {
       probeYype: 3
     });
     
