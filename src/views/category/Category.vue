@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" ref="aaa">
     <ul class="content">
       <li>分类列表1</li>
       <li>分类列表2</li>
@@ -106,7 +106,8 @@
 </template>
 
 <script>
-import BScroll from "better-scroll";
+import BScroll from "better-scroll"
+
 export default {
   name: "Category",
   data() {
@@ -118,8 +119,8 @@ export default {
     
   },
   mounted() {
-    this.scroll = new BScroll(document.querySelector('.wrapper'), {
-      probeYype: 3
+    this.scroll = new BScroll(this.$refs.aaa, {
+    //  probeYype: 3
     });
     
   }
@@ -127,7 +128,7 @@ export default {
 </script>
 
 <style scoped>
-.warpper {
+.wrapper {
   height: 150px;
   background-color: red;
   overflow: hidden;

@@ -10,7 +10,6 @@
   import {Swiper, SwiperItem} from 'components/common/swiper'
   export default {
     name: "DetailSwiper",
-    
     components: {
       Swiper,
       SwiperItem
@@ -23,7 +22,7 @@
         }
       }
     },
-    mounted() {
+    created() {
       console.log(this.topImages)
     }
   }

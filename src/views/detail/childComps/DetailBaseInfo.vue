@@ -11,8 +11,8 @@
       <span>{{goods.columns[1]}}</span>
       <span>{{goods.services[goods.services.length-1].name}}</span>
     </div>
-    <div class="info-services">
-      <span class="info-services-item" v-for="index in goods.services.length-1" :key="index">
+    <div class="info-service">
+      <span class="info-service-item" v-for="index in goods.services.length-1" :key="index">
         <img :src="goods.services[index-1].icon" alt="">
         <span>{{goods.services[index-1].name}}</span>
       </span>
@@ -69,7 +69,6 @@
     border-radius: 8px;
     margin-left: 5px;
 
-    /*让元素上浮一些: 使用相对定位即可*/
     position: relative;
     top: -8px;
   }
@@ -82,7 +81,7 @@
     border-bottom: 1px solid rgba(100,100,100,.1);
     justify-content: space-between;
   }
-
+ 
   .info-service {
     display: flex;
     justify-content: space-between;

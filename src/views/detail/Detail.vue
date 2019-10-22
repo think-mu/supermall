@@ -1,9 +1,13 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav"></detail-nav-bar>
-    <scroll class="content">
-      <detail-swiper :top-images='topImages'></detail-swiper>
+    <detail-nav-bar class="detail-nav"/>
+    <scroll class="content" ref="scroll">
+      <detail-swiper :top-images='topImages'/>
       <detail-base-info :goods='goods'/>
+      <detail-shop-info :shop='shop'/>
+      <detail-goods-info :detail-info='detailInfo' @imageLoad='imageLoad'/>
+      <detail-param-info :param-info='paramInfo'/>
+      <detail-comment-info :comment-info='commentInfo'/>
     </scroll>
   </div>
 </template>
@@ -13,10 +17,13 @@
   import DetailSwiper from './childComps/DetailSwiper'
   import DetailBaseInfo from './childComps/DetailBaseInfo'
   import DetailShopInfo from './childComps/DetailShopInfo'
+  import DetailGoodsInfo from './childComps/DetailGoodsInfo'
+  import DetailParamInfo from './childComps/DetailParamInfo'
+  import DetailCommentInfo from './childComps/DetailCommentInfo'
 
   import Scroll from 'components/common/scroll/Scroll'
 
-  import {getDetail, Goods} from 'network/detail'
+  import {getDetail, Goods, Shop, GoodsParam} from 'network/detail'
 
   export default {
     name: "Detail",
@@ -26,6 +33,9 @@
       DetailSwiper,
       DetailBaseInfo,
       DetailShopInfo,
+      DetailGoodsInfo,
+      DetailParamInfo,
+      DetailCommentInfo
       
     },
     data() {
@@ -33,7 +43,10 @@
         iid: null,
         goods: {},
         shop: {},
-        topImages: []
+        topImages: [],
+        detailInfo: {},
+        paramInfo: {},
+        commentInfo: {}
       }
     },
     created() {
@@ -47,8 +60,24 @@
         this.goods = new Goods(data.itemInfo, data.columns, data.shopInfo.services)
         
         //店铺信息
-        //this.shop = new Shop(data.shopInfo)
+        this.shop = new Shop(data.shopInfo)
+
+        //商品详情信息
+        this.detailInfo = data.detailInfo
+
+        //获取参数信息
+        this.paramInfo = new GoodsParam(data.itemParams.info, data.itemParams.rule)
+        
+        //取出评论信息
+        if (data.rate.cRate !== 0) {
+          this.commentInfo = data.rate.list[0]
+        }
       })
+    },
+    methods: {
+      imageLoad() {
+        this.$refs.scroll.refresh()
+      }
     }
   }
 </script>
@@ -56,7 +85,7 @@
 <style scoped>
   #detail {
     position: relative;
-    z-index: 9;
+    z-index: 99;
     background-color: #fff;
     height: 100vh;
   }
@@ -66,6 +95,7 @@
     background-color: #fff;
   }
   .content {
-    
+    background-color: #fff;
+    height: calc(100% - 44px);
   }
 </style>
