@@ -118,12 +118,15 @@ export default {
   created() {
     
   },
+  
   mounted() {
     this.scroll = new BScroll(this.$refs.aaa, {
     //  probeYype: 3
     });
     
-  }
+  },
+  
+  
 };
 </script>
 

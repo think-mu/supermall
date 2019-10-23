@@ -49,7 +49,7 @@ export default {
     scrollTo(x, y, time = 300) {
       this.scroll.scrollTo(x, y, time);
     },
-    refresh() {
+    refresh() {      
       this.scroll && this.scroll.refresh(); //判断this.scroll 是否有值
     },
     finishPullUp() {

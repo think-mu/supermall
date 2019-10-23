@@ -33,17 +33,17 @@
     },
     methods: {
       imgLoad() {
-        if (++this.counter === this.imagesLength) {
+        //if (++this.counter === this.imagesLength) {
           this.$emit('imageLoad')
-        }
+        //  }
       }
     },
-    watch: {
+ /*    watch: {
       detailInfo() {
         this.imagesLength = this.detailInfo.detailImage[0].list.length
-      
       }
-    }
+    }, */
+    
   }
 </script>
 

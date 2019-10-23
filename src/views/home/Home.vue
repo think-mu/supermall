@@ -1,3 +1,9 @@
+/*
+ * @Author: huangzibin
+ * @Date: 2019-10-23 10:42:09
+ * @Last Modified by: huangzibin
+ * @Last Modified time: 2019-10-23 12:05:15
+ */
 <template>
   <div id="home">
     <nav-bar class="home-nav">
@@ -34,6 +40,7 @@ import NavBar from "components/common/navbar/NavBar";
 import Scroll from "components/common/scroll/Scroll";
 
 import { debounce } from "common/utils";
+import {itemListenerMixin} from 'common/mixin'
 
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
@@ -57,6 +64,7 @@ export default {
     RecommendView,
     FeatureView
   },
+  mixins: [itemListenerMixin],
   data() {
     return {
       banners: [],
@@ -70,7 +78,7 @@ export default {
       isShowBackTop: true,
       tabOffsetTop: 0,
       isTabFixed: false,
-      saveY: 0
+      saveY: 0,
     };
   },
   created() {
@@ -80,10 +88,7 @@ export default {
     this.getHomeGoods("sell");
   },
   mounted() {
-    const refresh = debounce(this.$refs.scroll.refresh, 50);
-    this.$bus.$on("itemImageLoad", () => {
-      refresh();
-    });
+    
   },
   activated() {
       this.$refs.scroll.scrollTo(0, this.saveY, 0)
@@ -91,6 +96,9 @@ export default {
   },
   deactivated(){
     this.saveY = this.$refs.scroll.getScrollY()
+
+    //取消全局事件
+    this.$bus.$off('itemImageLoad', this.itemImgListener)
   },
   computed: {
     showGoods() {
