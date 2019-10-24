@@ -10,6 +10,8 @@
       <detail-comment-info ref="comment" :comment-info='commentInfo'/>
       <goods-list ref="recommend" :goods='recommends'/>
     </scroll>
+    <detail-bottom-bar/>
+    <back-top @click.native="backTop" v-show="isShowBackTop"/>
   </div>
 </template>
 
@@ -21,13 +23,13 @@
   import DetailGoodsInfo from './childComps/DetailGoodsInfo'
   import DetailParamInfo from './childComps/DetailParamInfo'
   import DetailCommentInfo from './childComps/DetailCommentInfo'
+  import DetailBottomBar from './childComps/DetailBottomBar'
 
   import Scroll from 'components/common/scroll/Scroll'
   import GoodsList from 'components/content/goods/GoodsList'
 
   import {getDetail, getRecommend, Goods, Shop, GoodsParam} from 'network/detail'
-  import {debounce} from 'common/utils'
-  import {itemListenerMixin} from 'common/mixin'
+  import {itemListenerMixin, backTopMixin} from 'common/mixin'
   export default {
     name: "Detail",
     components: {
@@ -39,10 +41,11 @@
       DetailGoodsInfo,
       DetailParamInfo,
       DetailCommentInfo,
-      GoodsList
+      GoodsList,
+      DetailBottomBar
       
     },
-    mixins: [itemListenerMixin],
+    mixins: [itemListenerMixin, backTopMixin],
     data() {
       return {
         iid: null,
@@ -121,13 +124,20 @@
         const positionY = -position.y
         
         let length = this.themeTopYs.length
-        for (let i = 0; i < length; i++){
+        /* for (let i = 0; i < length; i++){
           if (this.currentIndex !==i && ((i < length - 1 && positionY >= this.themeTopYs[i]
-            && positionY < this.themeTopYs[i+1] || (i === length - 1 && positionY >= this.themeTopYs[i])))) {
+            && positionY < this.themeTopYs[i+1]) || (i === length - 1 && positionY >= this.themeTopYs[i]))) {
+            this.currentIndex = i
+            this.$refs.nav.currentIndex = this.currentIndex
+          }
+        } */
+        for (let i = 0; i < length-1; i++){
+          if (this.currentIndex !==i && (positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i+1])) {
             this.currentIndex = i
             this.$refs.nav.currentIndex = this.currentIndex
           }
         }
+        this.listenShowBackTop(position)
       }
     },
     mounted() {
@@ -153,6 +163,6 @@
   }
   .content {
     background-color: #fff;
-    height: calc(100% - 44px);
+    height: calc(100% - 44px - 49px);
   }
 </style>

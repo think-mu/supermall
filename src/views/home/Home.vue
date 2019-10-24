@@ -2,7 +2,7 @@
  * @Author: huangzibin
  * @Date: 2019-10-23 10:42:09
  * @Last Modified by: huangzibin
- * @Last Modified time: 2019-10-23 12:05:15
+ * @Last Modified time: 2019-10-24 15:16:14
  */
 <template>
   <div id="home">
@@ -30,7 +30,7 @@
       ref="tabControl2" />
       <goods-list :goods="showGoods" />
     </scroll>
-    <back-top @click.native="backClick" v-show="isShowBackTop" />
+    <back-top @click.native="backTop" v-show="isShowBackTop" />
 
   </div>
 </template>
@@ -39,12 +39,10 @@
 import NavBar from "components/common/navbar/NavBar";
 import Scroll from "components/common/scroll/Scroll";
 
-import { debounce } from "common/utils";
-import {itemListenerMixin} from 'common/mixin'
+import {itemListenerMixin, backTopMixin} from 'common/mixin'
 
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
-import BackTop from "components/content/backtop/BackTop";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 
@@ -59,12 +57,11 @@ export default {
     Scroll,
     TabControl,
     GoodsList,
-    BackTop,
     HomeSwiper,
     RecommendView,
     FeatureView
   },
-  mixins: [itemListenerMixin],
+  mixins: [itemListenerMixin, backTopMixin],
   data() {
     return {
       banners: [],
@@ -75,7 +72,7 @@ export default {
         sell: { page: 0, list: [] }
       },
       currentType: "pop",
-      isShowBackTop: true,
+      isShowBackTop: false,
       tabOffsetTop: 0,
       isTabFixed: false,
       saveY: 0,
@@ -127,11 +124,9 @@ export default {
 
     },
 
-    backClick() {
-      this.$refs.scroll.scrollTo(0, 0);
-    },
+    
     contentScroll(position) {
-      this.isShowBackTop = (-position.y) > 1000;
+      this.listenShowBackTop(position)
       //决定tabControl是否吸顶（position：fixed）
       this.isTabFixed = (-position.y) > this.tabOffsetTop
     },
