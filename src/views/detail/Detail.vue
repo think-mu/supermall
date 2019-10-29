@@ -10,7 +10,7 @@
       <detail-comment-info ref="comment" :comment-info='commentInfo'/>
       <goods-list ref="recommend" :goods='recommends'/>
     </scroll>
-    <detail-bottom-bar/>
+    <detail-bottom-bar @addCart='addToCart'/>
     <back-top @click.native="backTop" v-show="isShowBackTop"/>
   </div>
 </template>
@@ -27,6 +27,7 @@
 
   import Scroll from 'components/common/scroll/Scroll'
   import GoodsList from 'components/content/goods/GoodsList'
+  import {debounce} from 'common/utils'
 
   import {getDetail, getRecommend, Goods, Shop, GoodsParam} from 'network/detail'
   import {itemListenerMixin, backTopMixin} from 'common/mixin'
@@ -102,7 +103,6 @@
           this.themeTopYs.push(this.$refs.params.$el.offsetTop)
           this.themeTopYs.push(this.$refs.comment.$el.offsetTop)
           this.themeTopYs.push(this.$refs.recommend.$el.offsetTop)
-          console.log(this.themeTopYs);
         }, 50)
 
       })
@@ -138,6 +138,17 @@
           }
         }
         this.listenShowBackTop(position)
+      },
+      addToCart() {
+        //获取购物车信息
+        const product = {}
+        product.image = this.topImages[0]
+        product.title = this.goods.title
+        product.desc = this.goods.desc
+        product.price = this.goods.realPrice;
+        product.iid = this.iid
+        
+        this.$store.dispatch('addCart', product)
       }
     },
     mounted() {
