@@ -28,9 +28,11 @@
   import Scroll from 'components/common/scroll/Scroll'
   import GoodsList from 'components/content/goods/GoodsList'
   import {debounce} from 'common/utils'
-
+  
   import {getDetail, getRecommend, Goods, Shop, GoodsParam} from 'network/detail'
   import {itemListenerMixin, backTopMixin} from 'common/mixin'
+
+  import {mapActions} from 'vuex'
   export default {
     name: "Detail",
     components: {
@@ -43,8 +45,7 @@
       DetailParamInfo,
       DetailCommentInfo,
       GoodsList,
-      DetailBottomBar
-      
+      DetailBottomBar,
     },
     mixins: [itemListenerMixin, backTopMixin],
     data() {
@@ -113,6 +114,7 @@
       })
     },
     methods: {
+      ...mapActions(['addCart']),
       imageLoad() {
         this.newRefresh()
         this.getThemeTopY()
@@ -148,7 +150,12 @@
         product.price = this.goods.realPrice;
         product.iid = this.iid
         
-        this.$store.dispatch('addCart', product)
+        this.addCart(product).then(res => {
+          this.$toast.show(res, 1500)
+        })
+        // this.$store.dispatch('addCart', product).then(res => {
+        //   console.log(res);
+        // })
       }
     },
     mounted() {
