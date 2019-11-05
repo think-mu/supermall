@@ -19,11 +19,21 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",
     "@vue/cli-service": "^3.10.0",
+    "postcss-px-to-viewport": "^1.1.1",
     "vue-template-compiler": "^2.6.10"
   },
   "postcss": {
     "plugins": {
-      "autoprefixer": {}
+      "autoprefixer": {},
+      "postcss-px-to-viewport": {
+        "viewportWidth": 375,
+        "viewportHeight": 667,
+        "unitPrecision": 5,
+        "viewportUnit": "vw",
+        "selectorBlackList": ["ignore", "tab-bar", "tab-bar-item" ],
+        "minPixelValue": 1,
+        "mediaQuery": false
+      }
     }
   },
   "browserslist": [
